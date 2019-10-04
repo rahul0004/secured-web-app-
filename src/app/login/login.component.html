@@ -1,0 +1,24 @@
+<div class="row" *ngIf="loggedInUser && loggedInUser.isAuthenticated" >
+    <div class="col-md-12">
+        {{ loggedInUser | json }}
+    </div>
+</div>
+<div class="row" *ngIf="loggedInUser && !loggedInUser.isAuthenticated" >
+        <div class="col-md-12">
+            <p class="text-danger"> Invalid Username and password </p>
+        </div>
+    </div>
+<div>
+    <form [formGroup]="loginForm">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input formControlName="username" class="form-control" placeholder="Enter username">            
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" class="form-control" formControlName="password" placeholder="Password">
+            <small class="form-text text-muted">We'll never share your password with anyone else.</small>
+        </div>        
+        <button type="submit" class="btn btn-primary" (click)="onSubmitLoginForm()">Submit</button>
+    </form>
+</div>
