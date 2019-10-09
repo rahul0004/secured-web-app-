@@ -11,7 +11,7 @@ import { AppUser } from '../models/app-user';
 })
 export class LoginComponent implements OnInit {
 
-  loggedInUser: AppUserAuth;
+  loggedInUser: AppUserAuth = null;
 
   constructor(private fb: FormBuilder, private securityService: SecurityService) { }
 
@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit {
 
   onSubmitLoginForm(): void {   
     if(this.loginForm.valid) {
-      this.securityService.login(this.loginForm.value).subscribe(user => {
-        this.loggedInUser = user;
+      this.securityService.login(this.loginForm.value).subscribe(resp => {
+        this.loggedInUser = resp;
       });   
     }    
   }

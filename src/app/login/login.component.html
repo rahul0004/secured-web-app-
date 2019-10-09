@@ -1,8 +1,3 @@
-<div class="row" *ngIf="loggedInUser && loggedInUser.isAuthenticated" >
-    <div class="col-md-12">
-        {{ loggedInUser | json }}
-    </div>
-</div>
 <div class="row" *ngIf="loggedInUser && !loggedInUser.isAuthenticated" >
         <div class="col-md-12">
             <p class="text-danger"> Invalid Username and password </p>

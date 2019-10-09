@@ -10,7 +10,10 @@ import { AppUser } from '../models/app-user';
 export class SecurityService {
 
   securityObject: AppUserAuth = new AppUserAuth();
-  constructor() { }
+  constructor() {
+    this.securityObject = this.getLoggedInUser();
+    //console.log("in constructor ... ", this.securityObject);
+  }
 
   resetSecurityObject(): void {
     this.securityObject.userName = "";
@@ -19,7 +22,7 @@ export class SecurityService {
     this.securityObject.userAccess.canAccessHome = false;
     this.securityObject.userAccess.canAccessProducts = false;
 
-    localStorage.removeItem("bearerToken");
+    localStorage.removeItem("bearerToken");    
   }
 
   login(entity: AppUser): Observable<AppUserAuth> {
@@ -30,11 +33,18 @@ export class SecurityService {
     console.log(this.securityObject);
     if(this.securityObject.userName != "") {
       localStorage.setItem("bearerToken", this.securityObject.bearerToken);
+      localStorage.setItem("loggedInUser", JSON.stringify(this.securityObject));
     }
     return of<AppUserAuth>(this.securityObject);
   }
 
-  logout(): void {    
+  logout(): void {
     this.resetSecurityObject();
+  }
+
+  getLoggedInUser(): AppUserAuth {
+    const loggedInUser :AppUserAuth = Object.assign(new AppUserAuth, JSON.parse(localStorage.getItem("loggedInUser")));
+    //console.log("loggedInUser....", loggedInUser);
+    return loggedInUser;
   }
 }
