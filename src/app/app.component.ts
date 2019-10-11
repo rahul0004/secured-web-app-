@@ -9,16 +9,4 @@ import { SecurityService } from './services/security.service';
 })
 export class AppComponent {
   title = 'secured web app';
-
-  securityObject: AppUserAuth = new AppUserAuth();
-
-  constructor(private securityService: SecurityService) {
-    this.securityObject = securityService.securityObject;
-  }
-
-  logout(): void {
-    this.securityService.logout();
-  }
-
-
 }

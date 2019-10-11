@@ -15,7 +15,7 @@ export const LOGIN_MOCKS: AppUserAuth[] = [
         bearerToken: "i15OIFJTHedf",
         isAuthenticated: true,
         userAccess: {
-            canAccessHome: false,
+            canAccessHome: true,
             canAccessProducts: true
         }
     }

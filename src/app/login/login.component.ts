@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { SecurityService } from '../services/security.service';
 import { AppUserAuth } from '../models/app-user-auth';
 import { AppUser } from '../models/app-user';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +13,18 @@ import { AppUser } from '../models/app-user';
 export class LoginComponent implements OnInit {
 
   loggedInUser: AppUserAuth = null;
+  requestedUrlBeforeLogin: string;
 
-  constructor(private fb: FormBuilder, private securityService: SecurityService) { }
+  constructor(private fb: FormBuilder, private securityService: SecurityService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.initFormValues();
+    this.requestedUrlBeforeLogin = this.route.snapshot.queryParamMap.get('requestedUrlBeforeLogin');
+    console.log("url...", this.requestedUrlBeforeLogin);
+    if (this.securityService.securityObject.isAuthenticated) {
+      // already logged in 
+      this.router.navigateByUrl('home');
+    }
   }
   
   loginForm = this.fb.group({});
@@ -33,6 +41,11 @@ export class LoginComponent implements OnInit {
     if(this.loginForm.valid) {
       this.securityService.login(this.loginForm.value).subscribe(resp => {
         this.loggedInUser = resp;
+        if(this.requestedUrlBeforeLogin) {
+          this.router.navigateByUrl(this.requestedUrlBeforeLogin);
+        }
+        // by default if no route is matched it will be redirected to login page 
+        this.router.navigateByUrl('home');
       });   
     }    
   }

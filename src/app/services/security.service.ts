@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { LOGIN_MOCKS } from '../mocks/app-user-auth-mock';
 import { AppUserAuth } from '../models/app-user-auth';
 import { AppUser } from '../models/app-user';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { AppUser } from '../models/app-user';
 export class SecurityService {
 
   securityObject: AppUserAuth = new AppUserAuth();
-  constructor() {
+  constructor(private router: Router) {
     this.securityObject = this.getLoggedInUser();
     //console.log("in constructor ... ", this.securityObject);
   }
@@ -22,7 +23,8 @@ export class SecurityService {
     this.securityObject.userAccess.canAccessHome = false;
     this.securityObject.userAccess.canAccessProducts = false;
 
-    localStorage.removeItem("bearerToken");    
+    localStorage.removeItem("bearerToken");
+    localStorage.removeItem("loggedInUser");
   }
 
   login(entity: AppUser): Observable<AppUserAuth> {
@@ -40,10 +42,11 @@ export class SecurityService {
 
   logout(): void {
     this.resetSecurityObject();
+    this.router.navigateByUrl('login');
   }
 
   getLoggedInUser(): AppUserAuth {
-    const loggedInUser :AppUserAuth = Object.assign(new AppUserAuth, JSON.parse(localStorage.getItem("loggedInUser")));
+    const loggedInUser :AppUserAuth = Object.assign(new AppUserAuth(), JSON.parse(localStorage.getItem("loggedInUser")));
     //console.log("loggedInUser....", loggedInUser);
     return loggedInUser;
   }
