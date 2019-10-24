@@ -1,10 +1,11 @@
 <div>
     <div class="row" *ngIf="loggedInUser && !loggedInUser.isAuthenticated">
         <div class="col-md-12">
-            <p class="text-danger"> Invalid Username and password </p>
+            <p class="text-danger"> {{ errorMesssage }} </p>
         </div>
     </div>
-    <div>
+    <div class="login-form">
+        <h1>Login Form</h1>
         <form [formGroup]="loginForm">
             <div class="form-group">
                 <label for="username">Username</label>

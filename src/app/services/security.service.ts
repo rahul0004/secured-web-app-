@@ -4,6 +4,16 @@ import { LOGIN_MOCKS } from '../mocks/app-user-auth-mock';
 import { AppUserAuth } from '../models/app-user-auth';
 import { AppUser } from '../models/app-user';
 import { Router } from '@angular/router';
+import {HttpClient, HttpHeaders } from '@angular/common/http';
+import { tap } from 'rxjs/operators' ;
+
+const API_URL = "http://localhost:3000/";
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-type': 'application/json'
+  })
+};
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +21,7 @@ import { Router } from '@angular/router';
 export class SecurityService {
 
   securityObject: AppUserAuth = new AppUserAuth();
-  constructor(private router: Router) {
+  constructor(private router: Router, private http: HttpClient) {
     this.securityObject = this.getLoggedInUser();
     //console.log("in constructor ... ", this.securityObject);
   }
@@ -27,7 +37,7 @@ export class SecurityService {
     localStorage.removeItem("loggedInUser");
   }
 
-  login(entity: AppUser): Observable<AppUserAuth> {
+  /*login(entity: AppUser): Observable<AppUserAuth> {
     //reset values 
     this.resetSecurityObject();
 
@@ -38,6 +48,17 @@ export class SecurityService {
       localStorage.setItem("loggedInUser", JSON.stringify(this.securityObject));
     }
     return of<AppUserAuth>(this.securityObject);
+  }*/
+
+  login(entity: AppUser): Observable<AppUserAuth> {
+    //reset values 
+    this.resetSecurityObject();
+    return this.http.post<AppUserAuth>(API_URL + 'auth', entity, httpOptions).pipe(tap(resp => {
+      Object.assign(this.securityObject, resp);
+      localStorage.setItem("bearerToken", this.securityObject.bearerToken);
+      localStorage.setItem("loggedInUser", JSON.stringify(this.securityObject));
+      return of<AppUserAuth>(this.securityObject);
+    }));
   }
 
   logout(): void {

@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   loggedInUser: AppUserAuth = null;
   requestedUrlBeforeLogin: string;
+  errorMesssage: string;
 
   constructor(private fb: FormBuilder, private securityService: SecurityService, private route: ActivatedRoute, private router: Router) { }
 
@@ -46,6 +47,10 @@ export class LoginComponent implements OnInit {
         }
         // by default if no route is matched it will be redirected to login page 
         this.router.navigateByUrl('home');
+      }, (err) => {
+        // error occured so initialize the security object 
+        this.loggedInUser = new AppUserAuth();
+        this.errorMesssage = err.error.error;
       });   
     }    
   }
