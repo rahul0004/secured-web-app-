@@ -10,7 +10,7 @@
                 <li class="nav-item active" *ngIf="securityObject.isAuthenticated && securityObject.userAccess.canAccessHome">
                     <a [routerLink]="[ '/home']" class="nav-link">Home<span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item" *ngIf="securityObject.isAuthenticated && securityObject.userAccess.canAccessProducts">
+                <li class="nav-item" *ngIf="securityObject.isAuthenticated && securityObject.userAccess.canAccessProduct">
                     <a [routerLink]="[ '/products']" class="nav-link">Products<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item float-right" *ngIf="!securityObject.isAuthenticated">
